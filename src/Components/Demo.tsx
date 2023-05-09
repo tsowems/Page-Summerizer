@@ -22,10 +22,10 @@ const Demo = () => {
     }
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { data } = await getSummary({ articleUrl: article.url });
-    console.log("abc", data);
+
     if (data?.summary) {
       const newArticle = { ...article, summary: data.summary };
       const updatedAllArticles = [newArticle, ...allArticles];
@@ -33,7 +33,6 @@ const Demo = () => {
       setAllArticles(updatedAllArticles);
 
       localStorage.setItem("articles", JSON.stringify(updatedAllArticles));
-      console.log(newArticle);
     }
   };
 
@@ -108,7 +107,11 @@ const Demo = () => {
           That wasn't supposed to happen...
           <br />
           <span className="font-satoshi font-normal text-gray-700">
-            {error?.data?.error}
+            {"data" in error ? (
+              <>
+                {error.data} {JSON.stringify(error.data)}{" "}
+              </>
+            ) : undefined}
           </span>
         </p>
       ) : (
